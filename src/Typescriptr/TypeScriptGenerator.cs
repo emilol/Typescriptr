@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
-using Typescriptr.Exceptions;
 using Typescriptr.Formatters;
 
 namespace Typescriptr
@@ -86,9 +84,10 @@ namespace Typescriptr
             return this;
         }
 
-        public TypeScriptGenerator WithNamespace(string @namespace)
+        public TypeScriptGenerator WithNamespace(string @namespace, bool namespaceEnums = false)
         {
             _namespace = @namespace;
+            _namespaceEnums = namespaceEnums;
             return this;
         }
 
@@ -126,7 +125,7 @@ namespace Typescriptr
         private readonly HashSet<string> _enumNames = new HashSet<string>();
         private readonly Stack<Type> _typeStack = new Stack<Type>();
         private string _namespace;
-        
+        private bool _namespaceEnums;
 
         public GenerationResult Generate(IEnumerable<Type> types)
         {
@@ -146,9 +145,10 @@ namespace Typescriptr
 
             if (!string.IsNullOrEmpty(_namespace))
             {
-                typeBuilder = new StringBuilder(typeBuilder.ToString().IndentEachLine(TabString));
-                typeBuilder.PrependLine($"declare namespace {_namespace} {{");
-                typeBuilder.AppendLine("}");
+                typeBuilder = typeBuilder.AddNamespace(_namespace, TabString);
+
+                if (_namespaceEnums)
+                    enumBuilder = enumBuilder.AddNamespace(_namespace, TabString);
             }
             else
             {

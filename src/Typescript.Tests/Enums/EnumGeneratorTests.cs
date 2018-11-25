@@ -31,6 +31,15 @@ namespace Typescript.Tests.Enums
 
             this.Assent(result);
         }
+
+        [Fact]
+        public void Generator_GenerateWithNamespace_GeneratesSuccessfully()
+        {
+            var generator = TypeScriptGenerator.CreateDefault().WithNamespace("Api", namespaceEnums: true);
+            var generated = generator.Generate(new[] {typeof(TypeWithEnum)});
+
+            this.Assent(generated.JoinTypesAndEnums());
+        }
         
         class TypeWithNullableEnum
         {

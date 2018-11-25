@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Text;
 using Assent;
 using Typescriptr;
@@ -28,6 +27,19 @@ namespace Typescript.Tests
             var indented = stringToIndent.IndentEachLine("  ");
 
             this.Assent(indented);
+        }
+
+        [Fact]
+        public void AddNamespace_ApiNamespace_ShouldAddApiNamespace()
+        {
+            var builder = new StringBuilder();
+
+            foreach (var c in "ABCD".ToCharArray())
+                builder.AppendLine(c.ToString());
+
+            var namespaced = builder.AddNamespace("Api", "  ");
+
+            this.Assent(namespaced.ToString());
         }
     }
 }

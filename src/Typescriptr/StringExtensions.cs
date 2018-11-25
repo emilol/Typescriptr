@@ -30,5 +30,14 @@ namespace Typescriptr
         {
             builder.Insert(0, $"{str}{Environment.NewLine}");
         }
+        
+        public static StringBuilder AddNamespace(this StringBuilder builder, string @namespace, string tabString)
+        {
+            var namespaceBuilder = new StringBuilder(builder.ToString().IndentEachLine(tabString));
+            namespaceBuilder.PrependLine($"declare namespace {@namespace} {{");
+            namespaceBuilder.AppendLine("}");
+
+            return namespaceBuilder;
+        }
     }
 }

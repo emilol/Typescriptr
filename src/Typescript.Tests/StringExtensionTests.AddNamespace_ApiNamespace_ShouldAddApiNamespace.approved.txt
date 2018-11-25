@@ -1,0 +1,6 @@
+declare namespace Api {
+  A
+  B
+  C
+  D
+}
